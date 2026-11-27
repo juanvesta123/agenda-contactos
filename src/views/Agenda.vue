@@ -44,7 +44,7 @@ onMounted(async () => {
       <li v-for="contacto in contactos" :key="contacto.id" class="contact-row">
         <Avatar :photo="contacto.foto" :name="contacto.nombre" />
         <div class="contact-text">
-          <h2>{{ contacto.nombre }}<template v-if="contacto.apellido"> {{ contacto.apellido }}</template></h2>
+          <h2>{{ contacto.nombre }}{{ contacto.apellido ? ' ' + contacto.apellido : '' }}</h2>
           <p>{{ contacto.telefono }}<span v-if="contacto.email" class="contact-email">{{ contacto.email }}</span></p>
         </div>
         <RouterLink class="button secondary" :aria-label="'Editar ' + contacto.nombre" :to="'/agenda/' + contacto.id">Editar</RouterLink>

@@ -48,7 +48,7 @@ async function save() {
   }
 
   const values = Object.fromEntries(Object.entries(fields).map(([key, value]) => [key, value.trim()]))
-  if (id) values.id = id
+  if (id) values.id = Number(id)
   let data = values
   if (photo.value) {
     data = new FormData()
