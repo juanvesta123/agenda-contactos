@@ -24,13 +24,12 @@ onMounted(async () => {
 </script>
 
 <template>
-  <section>
+  <section aria-labelledby="agenda-titulo">
     <div class="page-heading">
-      <div>
-        <h1>Mi agenda</h1>
-        <p v-if="!loading && !error" class="muted">{{ contactos.length }} {{ contactos.length === 1 ? 'contacto' : 'contactos' }}</p>
-      </div>
-      <RouterLink class="button primary" to="/agenda/crear">Nuevo contacto</RouterLink>
+      <h1 id="agenda-titulo">Mis contactos</h1>
+      <RouterLink class="button primary" to="/agenda/crear">
+        <span aria-hidden="true">+</span> Nuevo contacto
+      </RouterLink>
     </div>
 
     <p v-if="notice" class="feedback" role="status">{{ notice }}</p>
@@ -40,15 +39,43 @@ onMounted(async () => {
       <h2>Tu agenda está vacía</h2>
       <p class="muted">Usa «Nuevo contacto» para guardar el primero.</p>
     </div>
-    <ul v-else-if="contactos.length" class="contact-list" aria-label="Contactos">
-      <li v-for="contacto in contactos" :key="contacto.id" class="contact-row">
-        <Avatar :photo="contacto.foto" :name="contacto.nombre" />
-        <div class="contact-text">
-          <h2>{{ contacto.nombre }}{{ contacto.apellido ? ' ' + contacto.apellido : '' }}</h2>
-          <p>{{ contacto.telefono }}<span v-if="contacto.email" class="contact-email">{{ contacto.email }}</span></p>
-        </div>
-        <RouterLink class="button secondary" :aria-label="'Editar ' + contacto.nombre" :to="'/agenda/' + contacto.id">Editar</RouterLink>
-      </li>
-    </ul>
+    <div v-else-if="contactos.length" class="table-frame">
+      <table class="contact-table" aria-labelledby="agenda-titulo">
+        <colgroup>
+          <col class="photo-column">
+          <col class="name-column">
+          <col class="phone-column">
+          <col>
+        </colgroup>
+        <thead>
+          <tr>
+            <th scope="col">Foto</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Teléfono</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="contacto in contactos" :key="contacto.id">
+            <td><Avatar :photo="contacto.foto" :name="contacto.nombre" /></td>
+            <th scope="row" class="contact-name">
+              {{ contacto.nombre }}{{ contacto.apellido ? ' ' + contacto.apellido : '' }}
+            </th>
+            <td class="contact-phone">{{ contacto.telefono }}</td>
+            <td>
+              <div class="contact-actions">
+                <RouterLink class="button secondary compact" :aria-label="'Ver ' + contacto.nombre"
+                  :to="{ path: '/agenda/' + contacto.id, query: { vista: 'detalle' } }">Ver</RouterLink>
+                <RouterLink class="button edit compact" :aria-label="'Editar ' + contacto.nombre"
+                  :to="'/agenda/' + contacto.id">Editar</RouterLink>
+                <RouterLink class="button remove compact" :aria-label="'Eliminar ' + contacto.nombre"
+                  :to="{ path: '/agenda/' + contacto.id, query: { vista: 'eliminar' } }">Eliminar</RouterLink>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p v-if="!loading && !error" class="contact-total">Total de contactos: {{ contactos.length }}</p>
   </section>
 </template>

@@ -64,20 +64,20 @@ async function save() {
 </script>
 
 <template>
-  <section class="narrow">
+  <section class="narrow panel">
     <RouterLink class="back-link" to="/agenda">← Volver a mi agenda</RouterLink>
     <h1>Mi perfil</h1>
     <p v-if="notice" class="feedback" role="status">{{ notice }}</p>
     <p v-if="error" class="feedback error" role="alert">{{ error }}</p>
     <p v-if="loading" role="status" class="muted">Cargando perfil…</p>
-    <form v-if="available" class="panel stacked-form" @submit.prevent="save">
+    <form v-if="available" class="stacked-form" @submit.prevent="save">
       <CampoFoto :key="photoRevision" :photo="auth.usuario?.foto" :name="name"
         label="Foto de perfil" @change="photo = $event" />
       <div class="field">
         <label for="usuario">Nombre de usuario</label>
         <input id="usuario" v-model="name" autocomplete="username" :pattern="usernamePattern" required maxlength="50">
       </div>
-      <button class="primary" :disabled="busy">Guardar perfil</button>
+      <button class="primary" :disabled="busy">Guardar cambios</button>
     </form>
   </section>
 </template>

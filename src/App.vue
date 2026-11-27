@@ -40,14 +40,13 @@ async function logout() {
           <button class="nav-button" type="button" :disabled="busy" @click="logout">Salir</button>
         </template>
         <template v-else>
-          <RouterLink to="/login">Iniciar sesión</RouterLink>
-          <RouterLink to="/registro">Registrarme</RouterLink>
+          <RouterLink to="/">Inicio</RouterLink>
         </template>
       </nav>
     </div>
   </header>
   <main class="page">
     <p v-if="error" role="alert" class="feedback error">{{ error }}</p>
-    <RouterView :key="route.path" />
+    <RouterView :key="route.fullPath" />
   </main>
 </template>

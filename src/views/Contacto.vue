@@ -4,12 +4,15 @@ import { useRoute, useRouter } from 'vue-router'
 import { apiRequest } from '../api'
 import { useAuthStore } from '../stores/auth'
 import CampoFoto from '../components/CampoFoto.vue'
+import Avatar from '../components/Avatar.vue'
 import { phonePattern } from '../forms'
 
 const route = useRoute()
 const router = useRouter()
 const auth = useAuthStore()
 const id = route.params.id
+const detailMode = Boolean(id) && ['detalle', 'eliminar'].includes(route.query.vista)
+const deletingFromList = detailMode && route.query.vista === 'eliminar'
 const fields = reactive({ nombre: '', apellido: '', telefono: '', email: '', direccion: '', notas: '' })
 const currentPhoto = ref('')
 const photo = ref(null)
@@ -29,6 +32,7 @@ onMounted(async () => {
     for (const key of Object.keys(fields)) fields[key] = result.contacto[key] ?? ''
     currentPhoto.value = result.contacto.foto || ''
     available.value = true
+    if (deletingFromList) await showDelete(true)
   } catch (failure) {
     error.value = failure.message
   } finally {
@@ -71,6 +75,10 @@ async function save() {
 }
 
 async function showDelete(value) {
+  if (!value && deletingFromList) {
+    await router.push('/agenda')
+    return
+  }
   confirmDelete.value = value
   await nextTick()
   if (value) cancelButton.value?.focus()
@@ -97,10 +105,26 @@ async function remove() {
 <template>
   <section class="form-page">
     <RouterLink class="back-link" to="/agenda">← Volver a mi agenda</RouterLink>
-    <h1>{{ id ? 'Editar contacto' : 'Nuevo contacto' }}</h1>
+    <h1>{{ detailMode ? 'Detalle del contacto' : id ? 'Editar contacto' : 'Nuevo contacto' }}</h1>
     <p v-if="error" class="feedback error" role="alert">{{ error }}</p>
     <p v-if="loading" role="status" class="muted">Cargando contacto…</p>
-    <form v-if="available" class="panel stacked-form" @submit.prevent="save">
+    <div v-if="available && detailMode" class="panel contact-detail">
+      <div class="detail-heading">
+        <Avatar :photo="currentPhoto" :name="fields.nombre" large />
+        <h2>{{ fields.nombre }}{{ fields.apellido ? ' ' + fields.apellido : '' }}</h2>
+      </div>
+      <dl>
+        <div><dt>Teléfono</dt><dd>{{ fields.telefono }}</dd></div>
+        <div v-if="fields.email"><dt>Correo electrónico</dt><dd>{{ fields.email }}</dd></div>
+        <div v-if="fields.direccion"><dt>Dirección</dt><dd>{{ fields.direccion }}</dd></div>
+        <div v-if="fields.notas"><dt>Notas</dt><dd>{{ fields.notas }}</dd></div>
+      </dl>
+      <div v-if="!confirmDelete" class="actions">
+        <RouterLink class="button edit" :to="'/agenda/' + id">Editar contacto</RouterLink>
+        <button ref="deleteButton" type="button" class="button remove" @click="showDelete(true)">Eliminar contacto</button>
+      </div>
+    </div>
+    <form v-else-if="available" class="panel stacked-form" @submit.prevent="save">
       <CampoFoto :photo="currentPhoto" :name="fields.nombre"
         :label="currentPhoto ? 'Cambiar foto' : 'Foto (obligatoria)'" :required="!currentPhoto" @change="photo = $event" />
 
@@ -133,17 +157,17 @@ async function remove() {
           <RouterLink class="button secondary" to="/agenda">Cancelar</RouterLink>
         </div>
         <button v-if="id && !confirmDelete" ref="deleteButton" type="button"
-          class="delete-link" :disabled="busy" @click="showDelete(true)">Eliminar contacto</button>
+          class="button remove" :disabled="busy" @click="showDelete(true)">Eliminar contacto</button>
       </div>
-
-      <section v-if="confirmDelete" class="delete-box" aria-labelledby="confirmacion">
-        <h2 id="confirmacion">¿Eliminar a {{ fields.nombre }}?</h2>
-        <p>El contacto se quitará de tu agenda.</p>
-        <div class="actions">
-          <button ref="cancelButton" type="button" class="secondary" :disabled="busy" @click="showDelete(false)">Conservar contacto</button>
-          <button type="button" class="danger" :disabled="busy" @click="remove">Sí, eliminar</button>
-        </div>
-      </section>
     </form>
+
+    <section v-if="confirmDelete" class="delete-box" aria-labelledby="confirmacion">
+      <h2 id="confirmacion">¿Eliminar a {{ fields.nombre }}?</h2>
+      <p>El contacto se quitará de tu agenda.</p>
+      <div class="actions">
+        <button ref="cancelButton" type="button" class="secondary" :disabled="busy" @click="showDelete(false)">Conservar contacto</button>
+        <button type="button" class="danger" :disabled="busy" @click="remove">Sí, eliminar</button>
+      </div>
+    </section>
   </section>
 </template>

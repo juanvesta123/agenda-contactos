@@ -47,11 +47,11 @@ async function submit() {
 </script>
 
 <template>
-  <section class="narrow auth-page">
-    <h1>{{ registro ? 'Crear cuenta' : 'Iniciar sesión' }}</h1>
+  <section class="narrow auth-page panel">
+    <h1>{{ registro ? 'Registro de usuario' : 'Iniciar sesión' }}</h1>
     <p v-if="notice" class="feedback" role="status">{{ notice }}</p>
     <p v-if="error" class="feedback error" role="alert">{{ error }}</p>
-    <form class="panel stacked-form" @submit.prevent="submit">
+    <form class="stacked-form" @submit.prevent="submit">
       <div class="field">
         <label for="usuario">Nombre de usuario</label>
         <input id="usuario" v-model="username" autocomplete="username"
