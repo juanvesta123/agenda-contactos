@@ -46,13 +46,57 @@ nav a:hover, nav a.router-link-active, .nav-button:hover { text-decoration: unde
 .page { max-width: 1040px; margin: 0 auto; padding: 37px 24px 60px; }
 .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 24px; }
 .home {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 152px;
+  align-items: center;
+  gap: 26px;
   max-width: 850px;
-  margin: clamp(24px, 10vh, 85px) auto 0;
-  padding: 45px 24px;
-  text-align: center;
+  margin: clamp(22px, 8vh, 70px) auto 0;
+  padding: 42px 48px;
 }
-.home p { margin: 12px 0 24px; color: var(--muted); }
-.home .actions { justify-content: center; }
+.home h1 { font-size: clamp(1.65rem, 4vw, 2.25rem); }
+.home p { max-width: 41ch; margin: 12px 0 22px; color: var(--muted); }
+
+.home-notebook {
+  position: relative;
+  justify-self: center;
+  width: 118px;
+  aspect-ratio: 4 / 5;
+  border: 1px solid #9bafbf;
+  border-left: 11px solid #3a5971;
+  border-radius: 5px 4px 4px 5px;
+  background: #e9f0f5;
+  box-shadow: 3px 3px 0 #fcfdff, 4px 4px 0 #b5c2ce;
+}
+.home-notebook::after {
+  content: "";
+  position: absolute;
+  top: 31%;
+  right: -8px;
+  width: 7px;
+  height: 9px;
+  border-radius: 0 2px 2px 0;
+  background: #668298;
+  box-shadow: 0 14px #8fa3b3, 0 28px #b6a68a;
+}
+.notebook-label {
+  position: absolute;
+  inset: 25% 21% auto 18%;
+  height: 28%;
+  border: 1px solid #adbeca;
+  border-radius: 2px;
+  background: #f9fbfc;
+}
+.notebook-label::before, .notebook-label::after {
+  content: "";
+  position: absolute;
+  left: 17%;
+  width: 66%;
+  top: 34%;
+  height: 1px;
+  background: #adbeca;
+}
+.notebook-label::after { top: 65%; width: 46%; }
 
 .page-heading {
   display: flex;
@@ -176,7 +220,19 @@ button:disabled { cursor: wait; opacity: .65; }
   .page { padding: 26px 14px 40px; }
   .header-inner { padding: 9px 14px; }
   nav { gap: 14px; }
-  .home { padding: 32px 17px; margin-top: 19px; }
+  .home {
+    grid-template-columns: minmax(0, 1fr) 62px;
+    gap: 15px;
+    padding: 26px 18px;
+    margin-top: 16px;
+  }
+  .home-notebook { width: 58px; border-left-width: 6px; }
+  .home-notebook::after {
+    right: -5px;
+    width: 4px;
+    height: 5px;
+    box-shadow: 0 8px #8fa3b3, 0 16px #b6a68a;
+  }
   .panel { padding: 17px; }
   .form-grid { grid-template-columns: 1fr; }
   .photo-column { width: 53px; }
