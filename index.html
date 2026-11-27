@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f6f7f3">
+    <title>Agenda de contactos</title>
+    <script>
+      const ruta = new URLSearchParams(location.search).get('ruta')
+      if (ruta && !ruta.startsWith('//') && !ruta.includes('\\') && ruta.startsWith('/agenda-contactos/')) {
+        history.replaceState(null, '', ruta)
+      }
+    </script>
+    <script type="module" crossorigin src="/agenda-contactos/assets/index-B4uSvdBt.js"></script>
+    <link rel="stylesheet" crossorigin href="/agenda-contactos/assets/index-F5K_WXcR.css">
+  </head>
+  <body>
+    <div id="app"></div>
+  </body>
+</html>

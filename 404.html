@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="es"><meta charset="UTF-8"><title>Agenda de contactos</title>
+<script>
+  const base = '/agenda-contactos/'
+  if (location.pathname.startsWith(base) && location.pathname !== base) {
+    const ruta = location.pathname + location.search + location.hash
+    location.replace(base + '?ruta=' + encodeURIComponent(ruta))
+  }
+</script>
+<a href="/agenda-contactos/">Ir al inicio</a>
+</html>
