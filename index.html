@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f6f7f3">
+    <title>Agenda de contactos</title>
+    <script>
+      const ruta = new URLSearchParams(location.search).get('ruta')
+      if (ruta && !ruta.startsWith('//') && !ruta.includes('\\') && ruta.startsWith('%BASE_URL%')) {
+        history.replaceState(null, '', ruta)
+      }
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
